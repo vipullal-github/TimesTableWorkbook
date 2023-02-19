@@ -4,7 +4,7 @@ import 'dart:math';
 
 enum QuizState { initPending, paused, quizInProgress, quizOver }
 
-class QuizOrovider extends ChangeNotifier {
+class QuizProvider extends ChangeNotifier {
   final int _numQuestions;
   final int _multiplier;
   int _currentQuestion = 0;
@@ -14,7 +14,7 @@ class QuizOrovider extends ChangeNotifier {
   QuizState get state => _currentState;
   int get multiplier => _multiplier;
 
-  QuizOrovider(this._multiplier, [this._numQuestions = 20]);
+  QuizProvider(this._multiplier, [this._numQuestions = 20]);
 
   void prepareQuiz() {
     assert(_currentState == QuizState.initPending);
@@ -27,6 +27,13 @@ class QuizOrovider extends ChangeNotifier {
     }
     _currentState = QuizState.paused;
     _currentQuestion = 0;
+    notifyListeners();
+  }
+
+  void startQuiz() {
+    _currentQuestion = 0;
+    _currentState = QuizState.quizInProgress;
+    notifyListeners();
   }
 
   QuizItem currentQuestion() {
