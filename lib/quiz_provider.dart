@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:times_table_workbook/quiz_data.dart';
 import 'dart:math';
 
-enum QuizState { initPending, paused, quizInProgress, quizOver }
+enum QuizState {
+  initPending,
+  quizDataReady,
+  onStartQuiz,
+  updateCurrentItem,
+  acceptingAnswer,
+  quizInProgress,
+  quizOver
+}
 
 class QuizProvider extends ChangeNotifier {
   final int _numQuestions;
@@ -25,15 +33,24 @@ class QuizProvider extends ChangeNotifier {
       QuizItem qi = QuizItem(multiplicand, multiplicand * _multiplier);
       quizItems.add(qi);
     }
-    _currentState = QuizState.paused;
+    _currentState = QuizState.quizDataReady;
     _currentQuestion = 0;
     notifyListeners();
   }
 
   void startQuiz() {
     _currentQuestion = 0;
-    _currentState = QuizState.quizInProgress;
+    _currentState = QuizState.onStartQuiz;
     notifyListeners();
+  }
+
+  void onCurrentItemDrawn() {
+    _currentState = QuizState.acceptingAnswer;
+    notifyListeners();
+  }
+
+  void onKeyPressed(int key) {
+    // TODO:
   }
 
   QuizItem currentQuestion() {

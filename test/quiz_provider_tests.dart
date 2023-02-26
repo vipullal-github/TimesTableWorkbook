@@ -9,7 +9,7 @@ main() {
   test("Test provider states", () {
     expect(provider.state, QuizState.initPending);
     provider.prepareQuiz();
-    expect(provider.state, QuizState.paused);
+    expect(provider.state, QuizState.quizDataReady);
     do {
       QuizItem i = provider.currentQuestion();
       print(i);
