@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:times_table_workbook/quiz_data.dart';
 import 'dart:math';
@@ -5,6 +7,7 @@ import 'dart:math';
 enum QuizState {
   initPending,
   quizDataReady,
+  beginCountdownTimer,
   onStartQuiz,
   updateCurrentItem,
   acceptingAnswer,
@@ -22,27 +25,45 @@ class QuizProvider extends ChangeNotifier {
   QuizState get state => _currentState;
   int get multiplier => _multiplier;
 
-  QuizProvider(this._multiplier, [this._numQuestions = 20]);
+  QuizProvider(this._multiplier, [this._numQuestions = 20]) {
+    _currentState = QuizState.initPending;
+    _startQuizGeneration();
+  }
 
-  void prepareQuiz() {
+  void _startQuizGeneration() {
+    scheduleMicrotask(() {
+      quizItems = _generateQuizItems(_numQuestions);
+      _currentState = QuizState.quizDataReady; // UI shown StartQuiz button
+      notifyListeners();
+    });
+  }
+
+  List<QuizItem> _generateQuizItems(int count) {
     assert(_currentState == QuizState.initPending);
-    assert(_numQuestions >= 0);
+    assert(count >= 0);
+    List<QuizItem> items = [];
     Random r = Random(TimeOfDay.now().minute);
-    for (int i = 0; i < _numQuestions; i++) {
+    for (int i = 0; i < count; i++) {
       int multiplicand = r.nextInt(12);
       QuizItem qi = QuizItem(multiplicand, multiplicand * _multiplier);
-      quizItems.add(qi);
+      items.add(qi);
     }
-    _currentState = QuizState.quizDataReady;
+    return items;
+  }
+
+  // called when the user presses the StartButton...
+  void startQuiz() {
     _currentQuestion = 0;
+    _currentState = QuizState.beginCountdownTimer;
     notifyListeners();
   }
 
-  void startQuiz() {
-    _currentQuestion = 0;
+  void onCountdownComplete() {
     _currentState = QuizState.onStartQuiz;
     notifyListeners();
   }
+
+  void onQuizDisplayed() {}
 
   void onCurrentItemDrawn() {
     _currentState = QuizState.acceptingAnswer;

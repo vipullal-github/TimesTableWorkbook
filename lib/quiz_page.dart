@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:times_table_workbook/countdown_timer_widget.dart';
 import 'package:times_table_workbook/quiz_provider.dart';
 import 'package:times_table_workbook/virtual_keyboard.dart';
 import 'dart:developer' as dev;
@@ -33,31 +34,15 @@ class _QuizPageState extends State<QuizPage> {
 
   Widget _buildQuizWidget(BuildContext context) {
     quizWidget = Column(
-      children: const [
+      children: [
         Flexible(
           flex: 7,
-          child: QuizWidget(),
+          child: QuizWidget(widget.provider),
         ),
-        Flexible(flex: 3, child: VirtualKeyboard()),
+        Flexible(flex: 3, child: VirtualKeyboard(widget.provider)),
       ],
     );
-    scheduleMicrotask(() {widget.provider.onQuizUiReady(); });
     return quizWidget!;
-
-    // quizWidget = Column(
-    //   children: [
-    //     Flexible(
-    //       child: LayoutBuilder(
-    //         builder: (_, c) => SizedBox(
-    //           height: c.maxHeight,
-    //           width: c.maxWidth,
-    //           child: CustomPaint(painter: quizPainter),
-    //         ),
-    //       ),
-    //     ),
-    //   ],
-    // );
-    //return quizWidget!;
   }
 
   Widget _buildPageFromCurrentState(BuildContext context) {
@@ -65,9 +50,6 @@ class _QuizPageState extends State<QuizPage> {
         "_buildPageFromCurrentState called for state [${widget.provider.state}]");
     switch (widget.provider.state) {
       case QuizState.initPending:
-        scheduleMicrotask(() {
-          widget.provider.prepareQuiz();
-        });
         return const Center(child: Text("Preparing quiz..."));
       case QuizState.quizDataReady:
         return Center(
@@ -77,6 +59,8 @@ class _QuizPageState extends State<QuizPage> {
               },
               child: const Text("Press me to start the quiz")),
         );
+      case QuizState.beginCountdownTimer:
+        return CountDownTimerWidget(widget.provider);
       case QuizState.onStartQuiz:
         return _buildQuizWidget(context);
       case QuizState.updateCurrentItem:
