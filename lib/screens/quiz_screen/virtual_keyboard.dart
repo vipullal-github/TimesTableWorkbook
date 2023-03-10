@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'quiz_provider.dart';
+import '../../quiz_provider.dart';
 
 class VirtualKeyboard extends StatefulWidget {
   QuizProvider provider;

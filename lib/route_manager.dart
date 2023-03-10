@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main_page.dart';
-import 'quiz_page.dart';
+import 'screens/quiz_screen/quiz_page.dart';
 import 'quiz_provider.dart';
 
 class RouteManager {

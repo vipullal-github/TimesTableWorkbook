@@ -63,6 +63,11 @@ class QuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  QuizItem getCurrentItem(){
+    assert( _currentQuestion < quizItems.length );
+    return quizItems[_currentQuestion];
+  }
+
   void onQuizDisplayed() {}
 
   void onCurrentItemDrawn() {
