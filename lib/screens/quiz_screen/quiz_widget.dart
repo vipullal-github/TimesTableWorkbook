@@ -24,6 +24,9 @@ class _QuizWidgetState extends State<QuizWidget> {
   Widget build(BuildContext context) {
     print("QuizWidget::build called");
 
-    return Container(color: Colors.green);
+    return CustomPaint(
+      painter: quizPainter,
+      child: Container(),
+    );
   }
 }

@@ -20,7 +20,7 @@ class _CountDownTimerWidgetState extends State<CountDownTimerWidget> {
   void initState() {
     super.initState();
     _countDownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (count == 0) {
+      if (count == 1) {
         _countDownTimer.cancel();
         widget.provider.onCountdownComplete();
       } else {
@@ -32,10 +32,8 @@ class _CountDownTimerWidgetState extends State<CountDownTimerWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        count.toString(),
-        textScaleFactor: 30,
-      ),
+      child: Text(count.toString(),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 50)),
     );
   }
 }
