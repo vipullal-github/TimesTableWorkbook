@@ -97,7 +97,10 @@ class QuizPainter extends CustomPainter {
     start = Offset(_topLeft!.dx, _topLeft!.dy + _characterHeight * 3);
     end = Offset(start.dx + _characterWidth * 3, start.dy);
     c.drawLine(start, end, p);
-    int ans = 49; //_item!.answerGiven;
+    int ans = _item!.answerGiven;
+    if (ans == 0) {
+      return;
+    }
     int hiByte = (ans / 10).toInt();
     int loByte = ans - hiByte * 10;
 
@@ -184,6 +187,7 @@ class QuizPainter extends CustomPainter {
       _computePositions(size);
     }
     _drawPaper(canvas, size);
+    
 
     if (_item != null) {
       _drawMultiplicand(canvas, size);

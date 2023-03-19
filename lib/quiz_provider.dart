@@ -63,8 +63,8 @@ class QuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  QuizItem getCurrentItem(){
-    assert( _currentQuestion < quizItems.length );
+  QuizItem getCurrentItem() {
+    assert(_currentQuestion < quizItems.length);
     return quizItems[_currentQuestion];
   }
 
@@ -75,8 +75,44 @@ class QuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onKeyPressed(int key) {
-    // TODO:
+  void onKeyPressed(String key) {
+    print("QuizProvider handeling key $key");
+    switch (key) {
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        QuizItem qi = quizItems[_currentQuestion];
+        int a = qi.answerGiven;
+        a = a * 10 + int.parse(key);
+        // Limit to two digits only
+        if (a < 99) {
+          qi.answerGiven = a;
+          notifyListeners();
+        }
+        break;
+      case 'Bsp':
+        QuizItem qi = quizItems[_currentQuestion];
+        int a = qi.answerGiven;
+        a = 0;
+        qi.answerGiven = a;
+        notifyListeners();
+        break;
+      case 'Ok':
+        if (_currentQuestion + 1 < quizItems.length) {
+          ++_currentQuestion;
+        } else {
+          _currentQuestion = 0; // todo: Change state to quz Over
+        }
+        notifyListeners();
+        break;
+    }
   }
 
   QuizItem currentQuestion() {

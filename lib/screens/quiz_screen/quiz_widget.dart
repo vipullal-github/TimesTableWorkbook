@@ -18,6 +18,7 @@ class _QuizWidgetState extends State<QuizWidget> {
     super.initState();
     quizPainter.setMultiplier(widget.provider.multiplier);
     quizPainter.setQuizItem(widget.provider.getCurrentItem());
+    
   }
 
   @override
