@@ -26,6 +26,20 @@ final span = TextSpan(
    Width: 51.0, height: 67.0 - size: 50, fontWeight: Bold
 */
 
+/*
+  Note: There is no consistency on the internet about the correct names. I 
+  find the below representation more appropriate
+    2     -> multiplicand
+  x 5     -> multiplier
+  ---
+  10      -> product
+
+*/
+
+const int multiplicandRow = 0;
+const int multiplierRow = 1;
+const int answerRow = 2;
+
 class QuizPainter extends CustomPainter {
   final int numLines = 4; // 4 logical characters per row
   final int numCharacters = 4; // 4 logical lines
@@ -51,10 +65,14 @@ class QuizPainter extends CustomPainter {
     _item = i;
   }
 
-  void _drawMultiplicand(Canvas c, Size size) {
-    int multiplicand = _item!.multiplicand;
+  Offset _offsetForRowColumn(int row, int column) {
+    return Offset(_topLeft!.dx + column * _characterWidth,
+        _topLeft!.dy + row * _characterHeight);
+  }
+
+  void _paintANumber(Canvas c, int number, int row, int column) {
     TextSpan ts = TextSpan(
-      text: "$multiplicand",
+      text: "$number",
       style: _textStyle,
     );
     TextPainter tp = TextPainter(
@@ -63,16 +81,43 @@ class QuizPainter extends CustomPainter {
       textDirection: TextDirection.ltr,
     );
     tp.layout();
-    if (multiplicand >= 10) {}
-    tp.paint(c, _offsetForRowColumn(1, 2));
+    tp.paint(c, _offsetForRowColumn(row, column));
   }
 
-  Offset _offsetForRowColumn(int row, int column) {
-    return Offset(_topLeft!.dx + column * _characterWidth,
-        _topLeft!.dy + row * _characterHeight);
+  void _paintNumber(int number, Canvas c, int row) {
+    int hiByte = number ~/ 10; //(ans / 10).toInt();
+    int loByte = number - hiByte * 10;
+
+    if (hiByte != 0) {
+      TextSpan ts = TextSpan(
+        text: hiByte.toString(),
+        style: _textStyle,
+      );
+      TextPainter tp = TextPainter(
+          text: ts,
+          textAlign: TextAlign.start,
+          textDirection: TextDirection.ltr);
+      tp.layout();
+      tp.paint(c, _offsetForRowColumn(row, 1));
+    }
+
+    TextSpan ts = TextSpan(
+      text: loByte.toString(),
+      style: _textStyle,
+    );
+    TextPainter tp = TextPainter(
+        text: ts, textAlign: TextAlign.start, textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(c, _offsetForRowColumn(row, 2));
+  }
+
+  void _drawMultiplicand(Canvas c) {
+    int multiplicand = _item!.multiplicand;
+    _paintNumber(multiplicand, c, multiplicandRow);
   }
 
   void _drawMultiplier(Canvas c) {
+    // For now, assume that the multiplier is single digit
     if (multiplierPainter == null) {
       TextSpan ts = TextSpan(
         text: _multiplier.toString(),
@@ -84,10 +129,10 @@ class QuizPainter extends CustomPainter {
           textDirection: TextDirection.ltr);
       multiplierPainter!.layout();
     }
-    multiplierPainter!.paint(c, _offsetForRowColumn(0, 2));
+    multiplierPainter!.paint(c, _offsetForRowColumn(multiplierRow, 2));
   }
 
-  void _drawAnswer(Canvas c, Size size) {
+  void _drawAnswer(Canvas c) {
     Offset start = Offset(_topLeft!.dx, _topLeft!.dy + _characterHeight * 2);
     Offset end = Offset(start.dx + _characterWidth * 3, start.dy);
     Paint p = Paint();
@@ -101,29 +146,7 @@ class QuizPainter extends CustomPainter {
     if (ans == 0) {
       return;
     }
-    int hiByte = (ans / 10).toInt();
-    int loByte = ans - hiByte * 10;
-
-    if (hiByte != 0) {
-      TextSpan ts = TextSpan(
-        text: hiByte.toString(),
-        style: _textStyle,
-      );
-      TextPainter tp = TextPainter(
-          text: ts,
-          textAlign: TextAlign.start,
-          textDirection: TextDirection.ltr);
-      tp.layout();
-      tp.paint(c, _offsetForRowColumn(2, 1));
-    }
-    TextSpan ts = TextSpan(
-      text: loByte.toString(),
-      style: _textStyle,
-    );
-    TextPainter tp = TextPainter(
-        text: ts, textAlign: TextAlign.start, textDirection: TextDirection.ltr);
-    tp.layout();
-    tp.paint(c, _offsetForRowColumn(2, 2));
+    _paintNumber(ans, c, answerRow);
   }
 
   void _drawPaper(Canvas c, Size size) {
@@ -187,15 +210,14 @@ class QuizPainter extends CustomPainter {
       _computePositions(size);
     }
     _drawPaper(canvas, size);
-    
 
     if (_item != null) {
-      _drawMultiplicand(canvas, size);
+      _drawMultiplicand(canvas);
       _drawMultiplySymbol(canvas);
       _drawMultiplier(canvas);
-      _drawAnswer(canvas, size);
+      _drawAnswer(canvas);
     } else {
-      print("Yo! Item is null!");
+      dev.log("Yo! Item is null!");
     }
   }
 

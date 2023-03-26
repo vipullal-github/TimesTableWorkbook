@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:times_table_workbook/quiz_data.dart';
 import 'dart:math';
+import 'dart:developer' as dev;
 
 enum QuizState {
   initPending,
@@ -44,7 +45,10 @@ class QuizProvider extends ChangeNotifier {
     List<QuizItem> items = [];
     Random r = Random(TimeOfDay.now().minute);
     for (int i = 0; i < count; i++) {
-      int multiplicand = r.nextInt(12);
+      int multiplicand = 0;
+      do {
+        multiplicand = r.nextInt(12);
+      } while (multiplicand == 0);
       QuizItem qi = QuizItem(multiplicand, multiplicand * _multiplier);
       items.add(qi);
     }
@@ -76,7 +80,7 @@ class QuizProvider extends ChangeNotifier {
   }
 
   void onKeyPressed(String key) {
-    print("QuizProvider handeling key $key");
+    dev.log("QuizProvider handeling key $key, quizState is $state");
     switch (key) {
       case '0':
       case '1':
@@ -105,10 +109,13 @@ class QuizProvider extends ChangeNotifier {
         notifyListeners();
         break;
       case 'Ok':
+        QuizItem qi = quizItems[_currentQuestion];
+        qi.isCorrect = qi.answerGiven == qi.correctAnswer;
         if (_currentQuestion + 1 < quizItems.length) {
           ++_currentQuestion;
         } else {
-          _currentQuestion = 0; // todo: Change state to quz Over
+          _currentState = QuizState.quizOver;
+          _currentQuestion = 0;
         }
         notifyListeners();
         break;

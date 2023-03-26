@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../quiz_provider.dart';
 
 class VirtualKeyboard extends StatefulWidget {
-  QuizProvider provider;
-  VirtualKeyboard(this.provider, {super.key});
+  final QuizProvider provider;
+  const VirtualKeyboard(this.provider, {super.key});
 
   @override
   State<VirtualKeyboard> createState() => _VirtualKeyboardState();

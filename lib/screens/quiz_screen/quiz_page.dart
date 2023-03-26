@@ -24,16 +24,27 @@ class _QuizPageState extends State<QuizPage> {
     });
   }
 
+  Widget _buildQuizOverPage(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text("Quiz over...")),
+    );
+  }
+
   Widget _buildQuizWidget(BuildContext context) {
     quizWidget = Column(
       children: [
         Flexible(
           flex: 7,
-          child: QuizWidget(widget.provider),
+          child: QuizWidget(),
         ),
         Flexible(flex: 3, child: VirtualKeyboard(widget.provider)),
       ],
     );
+    
     return quizWidget!;
   }
 
@@ -64,10 +75,7 @@ class _QuizPageState extends State<QuizPage> {
       case QuizState.quizInProgress:
         return _buildQuizWidget(context);
       case QuizState.quizOver:
-        return Center(
-          child: ElevatedButton(
-              onPressed: () {}, child: const Text("Quiz over...")),
-        );
+        return _buildQuizOverPage(context);
       default:
         throw Exception("Unknown state of QuizProvider!");
     }
