@@ -212,6 +212,7 @@ class QuizPainter extends CustomPainter {
     _drawPaper(canvas, size);
 
     if (_item != null) {
+      //_displayStatus();
       _drawMultiplicand(canvas);
       _drawMultiplySymbol(canvas);
       _drawMultiplier(canvas);

@@ -26,6 +26,9 @@ class QuizProvider extends ChangeNotifier {
   QuizState get state => _currentState;
   int get multiplier => _multiplier;
 
+  int get currentIndex => _currentQuestion + 1;
+  int get maxQuestions => _numQuestions;
+
   QuizProvider(this._multiplier, [this._numQuestions = 20]) {
     _currentState = QuizState.initPending;
     _startQuizGeneration();
@@ -64,6 +67,11 @@ class QuizProvider extends ChangeNotifier {
 
   void onCountdownComplete() {
     _currentState = QuizState.onStartQuiz;
+    notifyListeners();
+  }
+
+  void onQuizPainterReady() {
+    _currentState = QuizState.quizInProgress;
     notifyListeners();
   }
 

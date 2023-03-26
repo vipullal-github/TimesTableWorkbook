@@ -37,6 +37,7 @@ class _QuizPageState extends State<QuizPage> {
   Widget _buildQuizWidget(BuildContext context) {
     quizWidget = Column(
       children: [
+        const Text("StatusBar"),
         Flexible(
           flex: 7,
           child: QuizWidget(),
@@ -44,7 +45,9 @@ class _QuizPageState extends State<QuizPage> {
         Flexible(flex: 3, child: VirtualKeyboard(widget.provider)),
       ],
     );
-    
+    scheduleMicrotask(() {
+      widget.provider.onQuizPainterReady();
+    });
     return quizWidget!;
   }
 
@@ -73,7 +76,7 @@ class _QuizPageState extends State<QuizPage> {
       case QuizState.acceptingAnswer:
         return quizWidget!;
       case QuizState.quizInProgress:
-        return _buildQuizWidget(context);
+        return quizWidget!;// _buildQuizWidget(context);
       case QuizState.quizOver:
         return _buildQuizOverPage(context);
       default:
