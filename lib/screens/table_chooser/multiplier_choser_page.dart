@@ -17,10 +17,16 @@ class MultiplierChooserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppData data = Provider.of<AppData>(context);
+    TextStyle headingStyle = Theme.of(context).textTheme.headlineMedium!;
     List<Widget> itemsList = [];
 
-    itemsList.add(const Text("Please choose a table..."));
-    for (int i = 2; i < 12; i++) {
+    itemsList.add(
+      Text(
+        "Please choose a table...",
+        style: headingStyle,
+      ),
+    );
+    for (int i = 2; i <= 9; i++) {
       itemsList.add(ListTile(
         title: Text("$i"),
         onTap: () {
@@ -32,10 +38,13 @@ class MultiplierChooserPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(data.appTitle),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: itemsList,
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: itemsList,
+        ),
       ),
     );
   }

@@ -11,8 +11,7 @@ class AppData extends ChangeNotifier {
   int get lastTable => _lastTableChosen;
   set lastTable(int value) => _lastTableChosen = value;
 
-  int _maxQuestions= 5;
+  int _maxQuestions = 10;
   int get maxQuestions => _maxQuestions;
   set maxQuestions(int value) => _maxQuestions = value;
-
 }

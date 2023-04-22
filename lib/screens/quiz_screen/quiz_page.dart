@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+//import 'package:just_audio/just_audio.dart';
 import 'package:times_table_workbook/models/quiz_results_model.dart';
+import 'package:times_table_workbook/native/audio_player.dart';
 import 'countdown_timer_widget.dart';
 import '../../quiz_provider.dart';
 import 'virtual_keyboard.dart';
@@ -18,6 +20,19 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   Widget? quizWidget;
+  //late AudioPlayer audioPlayer;
+
+  @override
+  void initState() {
+    super.initState();
+    //audioPlayer = AudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    //audioPlayer.dispose();
+    super.dispose();
+  }
 
   void _startQuiz() {
     scheduleMicrotask(() {
@@ -67,6 +82,16 @@ class _QuizPageState extends State<QuizPage> {
     return quizWidget!;
   }
 
+  void _playErrorSound() async {
+    AudioPlayer.playErrorNote();
+    widget.provider.onSoundSetup();
+  }
+
+  void _playSuccessSound() async {
+    AudioPlayer.playSuccessNote();
+    widget.provider.onSoundSetup();
+  }
+
   Widget _buildPageFromCurrentState(BuildContext context) {
     dev.log(
         "_buildPageFromCurrentState called for state [${widget.provider.state}]");
@@ -93,6 +118,13 @@ class _QuizPageState extends State<QuizPage> {
         return quizWidget!;
       case QuizState.quizInProgress:
         return quizWidget!; // _buildQuizWidget(context);
+      case QuizState.playErrorSound:
+        _playErrorSound();
+        return quizWidget!;
+      case QuizState.playSuccessSound:
+        _playSuccessSound();
+        return quizWidget!;
+
       case QuizState.quizOver:
         return _buildQuizOverPage(context);
       default:

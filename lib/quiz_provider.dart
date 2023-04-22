@@ -17,6 +17,8 @@ enum QuizState {
   updateCurrentItem,
   acceptingAnswer,
   quizInProgress,
+  playErrorSound,
+  playSuccessSound,
   quizOver
 }
 
@@ -63,8 +65,14 @@ class QuizProvider extends ChangeNotifier {
     assert(_currentState == QuizState.initPending);
     assert(count >= 0);
     List<QuizItem> items = [];
+    // First fill in the first set 2..10
+    for (int i = 2; i < 10; i++) {
+      QuizItem qi = QuizItem(i, i * _multiplier);
+      items.add(qi);
+    }
     Random r = Random(TimeOfDay.now().minute);
-    for (int i = 0; i < count; i++) {
+    items.shuffle(r);
+    while (items.length < data.maxQuestions) {
       int multiplicand = 0;
       do {
         multiplicand = r.nextInt(12);
@@ -104,6 +112,31 @@ class QuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  void onSoundSetup(){
+    _currentState = QuizState.acceptingAnswer;
+  }
+
+
+
+  void _scoreItem() {
+    QuizItem qi = quizItems[_currentQuestion];
+    qi.isCorrect = qi.answerGiven == qi.correctAnswer;
+    if (qi.isCorrect) {
+      _currentState = QuizState.playSuccessSound;
+      nextQuestion();
+    } else {
+      _currentState = QuizState.playErrorSound;
+    }
+    // if (_currentQuestion + 1 < quizItems.length) {
+    //   ++_currentQuestion;
+    // } else {
+    //   _currentState = QuizState.quizOver;
+    //   _currentQuestion = 0;
+    // }
+    notifyListeners();
+  }
+
   void onKeyPressed(String key) {
     dev.log("QuizProvider handeling key $key, quizState is $state");
     switch (key) {
@@ -134,15 +167,7 @@ class QuizProvider extends ChangeNotifier {
         notifyListeners();
         break;
       case 'Ok':
-        QuizItem qi = quizItems[_currentQuestion];
-        qi.isCorrect = qi.answerGiven == qi.correctAnswer;
-        if (_currentQuestion + 1 < quizItems.length) {
-          ++_currentQuestion;
-        } else {
-          _currentState = QuizState.quizOver;
-          _currentQuestion = 0;
-        }
-        notifyListeners();
+        _scoreItem();
         break;
     }
   }
