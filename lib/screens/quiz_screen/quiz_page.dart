@@ -27,7 +27,7 @@ class _QuizPageState extends State<QuizPage> {
 
   Widget _buildQuizOverPage(BuildContext context) {
     QuizResults qr = widget.provider.getQuizResults();
-    TextStyle? ts = Theme.of(context).textTheme.headlineLarge;
+    TextStyle? ts = Theme.of(context).textTheme.bodyMedium;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +36,7 @@ class _QuizPageState extends State<QuizPage> {
           Text("Total Questions: ${qr.totalNumberOfWuestions}", style: ts),
           const SizedBox(height: 12),
           Text(
-            "Number of corret answers: ${qr.currectAnswers}",
+            "Correct answers: ${qr.currectAnswers}",
             style: ts,
           ),
           const SizedBox(height: 12),

@@ -9,10 +9,9 @@ class MultiplierChooserPage extends StatelessWidget {
 
   void _startQuizForTable(BuildContext context, int multiplier) {
     dev.log("Starting quiz for multiplier $multiplier");
-    AppData data = Provider.of<AppData>(context);
+    AppData data = Provider.of<AppData>(context, listen: false);
     data.lastTable = multiplier;
-    Navigator.of(context)
-        .pushNamed(RouteManager.quizPage);
+    Navigator.of(context).pushNamed(RouteManager.quizPage);
   }
 
   @override
