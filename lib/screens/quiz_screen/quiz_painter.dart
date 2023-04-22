@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../quiz_data.dart';
+import '../../models/quiz_data.dart';
 import 'dart:developer' as dev;
 
 /*

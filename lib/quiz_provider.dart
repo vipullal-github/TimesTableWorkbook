@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:times_table_workbook/quiz_data.dart';
+import 'package:times_table_workbook/models/quiz_data.dart';
 import 'dart:math';
 import 'dart:developer' as dev;
+
+import 'package:times_table_workbook/models/quiz_results_model.dart';
 
 enum QuizState {
   initPending,
@@ -29,9 +31,19 @@ class QuizProvider extends ChangeNotifier {
   int get currentIndex => _currentQuestion + 1;
   int get maxQuestions => _numQuestions;
 
-  QuizProvider(this._multiplier, [this._numQuestions = 20]) {
+  QuizProvider(this._multiplier, [this._numQuestions = 5]) {
     _currentState = QuizState.initPending;
     _startQuizGeneration();
+  }
+
+  QuizResults getQuizResults() {
+    int numCurrect = quizItems.fold(0, (previousValue, QuizItem item) {
+      if (item.answerGiven == item.correctAnswer) {
+        return ++previousValue;
+      }
+      return previousValue;
+    });
+    return QuizResults(_multiplier, _numQuestions, numCurrect, 0);
   }
 
   void _startQuizGeneration() {

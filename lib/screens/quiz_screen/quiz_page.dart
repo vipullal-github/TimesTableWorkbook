@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:times_table_workbook/models/quiz_results_model.dart';
 import 'countdown_timer_widget.dart';
 import '../../quiz_provider.dart';
 import 'virtual_keyboard.dart';
@@ -25,12 +26,27 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _buildQuizOverPage(BuildContext context) {
+    QuizResults qr = widget.provider.getQuizResults();
+    TextStyle? ts = Theme.of(context).textTheme.headlineLarge;
     return Center(
-      child: ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text("Quiz over...")),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text("Total Questions: ${qr.totalNumberOfWuestions}", style: ts),
+          const SizedBox(height: 12),
+          Text(
+            "Number of corret answers: ${qr.currectAnswers}",
+            style: ts,
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Press me to continue...")),
+        ],
+      ),
     );
   }
 
@@ -76,7 +92,7 @@ class _QuizPageState extends State<QuizPage> {
       case QuizState.acceptingAnswer:
         return quizWidget!;
       case QuizState.quizInProgress:
-        return quizWidget!;// _buildQuizWidget(context);
+        return quizWidget!; // _buildQuizWidget(context);
       case QuizState.quizOver:
         return _buildQuizOverPage(context);
       default:
