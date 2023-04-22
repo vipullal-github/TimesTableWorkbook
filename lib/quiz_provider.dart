@@ -7,6 +7,8 @@ import 'dart:developer' as dev;
 
 import 'package:times_table_workbook/models/quiz_results_model.dart';
 
+import 'app_data.dart';
+
 enum QuizState {
   initPending,
   quizDataReady,
@@ -19,8 +21,9 @@ enum QuizState {
 }
 
 class QuizProvider extends ChangeNotifier {
-  final int _numQuestions;
-  final int _multiplier;
+  final AppData data;
+  late int _numQuestions;
+  late int _multiplier;
   int _currentQuestion = 0;
   List<QuizItem> quizItems = [];
 
@@ -31,7 +34,9 @@ class QuizProvider extends ChangeNotifier {
   int get currentIndex => _currentQuestion + 1;
   int get maxQuestions => _numQuestions;
 
-  QuizProvider(this._multiplier, [this._numQuestions = 5]) {
+  QuizProvider(this.data) {
+    _multiplier = data.lastTable;
+    _numQuestions = data.maxQuestions;
     _currentState = QuizState.initPending;
     _startQuizGeneration();
   }

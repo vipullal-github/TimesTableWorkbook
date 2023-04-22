@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'app_data.dart';
 import 'route_manager.dart';
 
 void main() {
@@ -11,15 +13,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TimesTable',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      create: (_) => AppData(),
+      builder: (_,__ ) => MaterialApp(
+        title: 'TimesTable',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: RouteManager.homePage,
+        onGenerateRoute: (settings) {
+          return RouteManager.generateRoute(settings);
+        },
       ),
-      initialRoute: RouteManager.homePage,
-      onGenerateRoute: (settings) {
-        return RouteManager.generateRoute(settings);
-      },
     );
   }
 }

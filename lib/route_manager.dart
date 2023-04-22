@@ -15,24 +15,19 @@ class RouteManager {
     switch (settings.name) {
       case homePage:
         return MaterialPageRoute(
-          builder: (BuildContext context) => ChangeNotifierProvider(
-            create: (context) => AppData(),
-            builder: (context, child) => Consumer<AppData>(
-              builder: (context, value, child) => const MainPage(),
-            ),
-          ),
+          builder: (BuildContext context) => const MainPage(),
         );
       case multiplierChooser:
         return MaterialPageRoute(
-          builder: (BuildContext context) => ChangeNotifierProvider(
-            create: (context) => AppData(),
-            builder: (context, child) => const MultiplierChooserPage(),
-          ),
+          builder: (BuildContext context) => const MultiplierChooserPage(),
         );
+
       case quizPage:
         return MaterialPageRoute(builder: (context) {
           return ChangeNotifierProvider(create: (context) {
-            return QuizProvider(settings.arguments as int);
+            // Use proxyProvider here?
+            AppData data = Provider.of<AppData>(context, listen: false );
+            return QuizProvider(data);
           }, builder: (context, child) {
             return Consumer<QuizProvider>(
               builder: (context, value, child) {
