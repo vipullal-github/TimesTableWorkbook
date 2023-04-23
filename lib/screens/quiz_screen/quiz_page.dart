@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 //import 'package:just_audio/just_audio.dart';
 import 'package:times_table_workbook/models/quiz_results_model.dart';
 import 'package:times_table_workbook/native/audio_player.dart';
+import '../../app_data.dart';
 import 'countdown_timer_widget.dart';
 import '../../quiz_provider.dart';
 import 'virtual_keyboard.dart';
@@ -134,9 +136,10 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppData data = Provider.of<AppData>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Quiz"),
+        title: Text("$data.appTitle"),
       ),
       body: _buildPageFromCurrentState(context),
     );

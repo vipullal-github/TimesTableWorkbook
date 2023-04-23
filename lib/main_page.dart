@@ -7,13 +7,33 @@ import 'app_data.dart';
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
 
-  void _gotoQuizPage(BuildContext context) {
-    Navigator.of(context).pushNamed(RouteManager.multiplierChooser);
+  void _gotoSelectPracticeOrQuiz(BuildContext context, int multipler) {
+    AppData data = Provider.of<AppData>(context, listen: false);
+    data.lastTable = multipler;
+    Navigator.of(context).pushNamed(RouteManager.choseModePage);
   }
 
   @override
   Widget build(BuildContext context) {
     AppData data = Provider.of<AppData>(context, listen: false);
+    TextStyle headingStyle = Theme.of(context).textTheme.headlineMedium!;
+    List<Widget> itemsList = [];
+
+    itemsList.add(
+      Text(
+        "Please choose a table...",
+        style: headingStyle,
+      ),
+    );
+    for (int i = 2; i <= 9; i++) {
+      itemsList.add(ListTile(
+        title: Text("$i"),
+        onTap: () {
+          _gotoSelectPracticeOrQuiz(context, i);
+        },
+      ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(data.appTitle),
@@ -21,13 +41,7 @@ class MainPage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-                onPressed: () {
-                  _gotoQuizPage(context);
-                },
-                child: const Text("Take quiz")),
-          ],
+          children: itemsList,
         ),
       ),
     );
