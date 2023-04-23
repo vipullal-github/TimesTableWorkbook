@@ -112,19 +112,22 @@ class QuizProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  void onSoundSetup(){
-    _currentState = QuizState.acceptingAnswer;
+  void onSoundSetup() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (quizItems[_currentQuestion].isCorrect) {
+        nextQuestion();
+      } else {
+        _currentState = QuizState.acceptingAnswer;
+        quizItems[_currentQuestion].answerGiven = 0;
+      }
+    });
   }
-
-
 
   void _scoreItem() {
     QuizItem qi = quizItems[_currentQuestion];
     qi.isCorrect = qi.answerGiven == qi.correctAnswer;
     if (qi.isCorrect) {
       _currentState = QuizState.playSuccessSound;
-      nextQuestion();
     } else {
       _currentState = QuizState.playErrorSound;
     }
@@ -179,6 +182,7 @@ class QuizProvider extends ChangeNotifier {
   void nextQuestion() {
     if (_currentQuestion + 1 < _numQuestions) {
       ++_currentQuestion;
+      _currentState = QuizState.acceptingAnswer;
     } else {
       _currentState = QuizState.quizOver;
     }
