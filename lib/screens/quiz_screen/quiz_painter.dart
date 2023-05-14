@@ -70,21 +70,7 @@ class QuizPainter extends CustomPainter {
         _topLeft!.dy + row * _characterHeight);
   }
 
-  void _paintANumber(Canvas c, int number, int row, int column) {
-    TextSpan ts = TextSpan(
-      text: "$number",
-      style: _textStyle,
-    );
-    TextPainter tp = TextPainter(
-      text: ts,
-      textAlign: TextAlign.start,
-      textDirection: TextDirection.ltr,
-    );
-    tp.layout();
-    tp.paint(c, _offsetForRowColumn(row, column));
-  }
-
-  void _paintNumber(int number, Canvas c, int row) {
+  void _paintToDigitNumber(int number, Canvas c, int row) {
     int hiByte = number ~/ 10; //(ans / 10).toInt();
     int loByte = number - hiByte * 10;
 
@@ -113,7 +99,7 @@ class QuizPainter extends CustomPainter {
 
   void _drawMultiplicand(Canvas c) {
     int multiplicand = _item!.multiplicand;
-    _paintNumber(multiplicand, c, multiplicandRow);
+    _paintToDigitNumber(multiplicand, c, multiplicandRow);
   }
 
   void _drawMultiplier(Canvas c) {
@@ -146,7 +132,7 @@ class QuizPainter extends CustomPainter {
     if (ans == 0) {
       return;
     }
-    _paintNumber(ans, c, answerRow);
+    _paintToDigitNumber(ans, c, answerRow);
   }
 
   void _drawPaper(Canvas c, Size size) {

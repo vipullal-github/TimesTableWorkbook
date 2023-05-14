@@ -50,7 +50,12 @@ class QuizProvider extends ChangeNotifier {
       }
       return previousValue;
     });
-    return QuizResults(_multiplier, _numQuestions, numCurrect, 0);
+    return QuizResults(
+        dateTaken: DateTime.now(),
+        totalTimeTaken: 0,
+        multiplier: _multiplier,
+        totalNumberOfQuestions: _numQuestions,
+        currectAnswers: numCurrect);
   }
 
   void _startQuizGeneration() {

@@ -25,13 +25,27 @@ class _QuizPageState extends State<QuizPage> {
   //late AudioPlayer audioPlayer;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    dev.log("QuizPage::didChangeDependencies called");
+  }
+
+  @override
+  void didUpdateWidget(QuizPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    dev.log("QuizPage::didUpdateWidget called...");
+  }
+
+  @override
   void initState() {
+    dev.log("QuizPage::initState called...");
     super.initState();
     //audioPlayer = AudioPlayer();
   }
 
   @override
   void dispose() {
+    dev.log("QuizPage::dispose called...");
     //audioPlayer.dispose();
     super.dispose();
   }
@@ -50,7 +64,7 @@ class _QuizPageState extends State<QuizPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("Total Questions: ${qr.totalNumberOfWuestions}", style: ts),
+          Text("Total Questions: ${qr.totalNumberOfQuestions}", style: ts),
           const SizedBox(height: 12),
           Text(
             "Correct answers: ${qr.currectAnswers}",

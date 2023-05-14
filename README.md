@@ -1,6 +1,8 @@
 # times_table_workbook
 
-A new Flutter project.
+This project can be used by children to learn the times tables.
+
+It currently works on Android. iOS and Windows support expected soon
 
 ## Getting Started
 

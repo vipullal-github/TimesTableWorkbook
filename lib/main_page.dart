@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:times_table_workbook/route_manager.dart';
 
+import 'my_app_bar.dart';
 import 'app_data.dart';
 
 class MainPage extends StatelessWidget {
@@ -35,9 +36,7 @@ class MainPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(data.appTitle),
-      ),
+      appBar: MyAppBar( screenName: data.appTitle),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
